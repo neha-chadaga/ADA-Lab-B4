@@ -1,0 +1,97 @@
+#include<stdio.h>
+#include<process.h>
+#include<time.h>
+#include<stdlib.h>
+double time_spent = 0.0;
+
+int recursiveLinSearch(int a[],int beg,int last,int se)
+{
+ if(beg==last)
+   return -1;
+ if(a[beg]==se)
+   return beg+1;
+ return recursiveLinSearch(a,beg+1,last,se);
+}
+int recursiveBinSearch(int a[],int beg,int last,int se)
+{
+ int mid;
+ if(last>=beg){
+   mid=(beg+last)/2;
+   if(a[mid]==se)
+     return mid+1;
+   if(a[mid]>se)
+     return recursiveBinSearch(a,beg,mid-1,se);
+   else
+     return recursiveBinSearch(a,mid+1,last,se);
+ }
+ return -1;
+}
+int main()
+{
+ int k,l,se,ch,linValue,binValue;
+ int a[100000];
+ int i,j,temp;
+ double difference;
+
+ printf("1.Linear Search\n2.Binary Search\n3.Exit\n");
+ printf("Enter your choice:\n");
+ scanf("%d",&ch);
+
+ if(ch==1){
+    printf("Enter array size:\n");
+    scanf("%d",&l);
+
+    clock_t begin = clock();
+    printf("ARRAY ELEMENTS:\n");
+    srand(time(0));
+    for(k=0; k<l; k++){
+       a[k]=rand();
+       printf("%d ",a[k]);
+    }
+    printf("\n");
+    printf("Enter Search element:\n");
+    scanf("%d",&se);
+
+    linValue=recursiveLinSearch(a,0,l,se);
+    if(linValue==-1)
+     printf("Search element not found\n");
+    else
+     printf("Search element found at Position %d\n",linValue);
+    clock_t end = clock();
+    difference= end - begin;
+ }
+ else{
+    printf("Enter the array elements in ascending order\n");
+    printf("Enter array size:\n");
+    scanf("%d",&l);
+    printf("ARRAY ELEMENTS:\n");
+    srand(time(0));
+    for(k=0; k<l; k++){
+      a[k]=rand();
+     }
+   for(i=0;i<(l-1);i++){
+   for(j=i+1;j<l;j++){
+     if(a[j]<a[i]){
+        temp=a[j];
+        a[j]=a[i];
+        a[i]=temp;
+       }
+     }
+   }
+ for(i=0;i<l;i++){
+     printf("%d ",a[i]);
+ }
+    clock_t begin = clock();
+    printf("\nEnter Search element:\n");
+    scanf("%d",&se);
+    binValue=recursiveBinSearch(a,0,l-1,se);
+    if(binValue==-1)
+       printf("Search element not found\n");
+    else
+       printf("Search element found at Position %d\n",binValue);
+    clock_t end = clock();
+    difference= end - begin;
+ }
+time_spent += (double)(difference)/CLOCKS_PER_SEC;
+printf("THE ELAPSED TIME IS %f SECONDS\n", time_spent);
+}
